@@ -2,12 +2,16 @@ actions = {
     "apt_update": {
         "cascade_skip": False,
         "command": "apt-get update",
+        "expected_return_code": 0,
     },
-}
-actions = {
     "apt_upgrade": {
         "cascade_skip": False,
         "command": "apt-get upgrade -y",
+        "expected_return_code": 0,
+    },
+    "set graphical boot target": {
+        "command": "systemctl set-default graphical.target",
+        "expected_return_code": 0,
     },
 }
 pkg_apt = {
@@ -32,6 +36,9 @@ pkg_apt = {
     "xdotool": {
         "installed": True,
     },
+    "lightdm": {
+        "installed": True,
+    },
 }
 users = {
     "cccp": {
@@ -52,6 +59,7 @@ users = {
             "users",
             "video",
             "tty",
+           # "autologin",
         ],
     },
 }
@@ -119,4 +127,49 @@ files = {
         "content_type": "text",
         "source": "mplayer_msg.sh",
     },
+    # "/home/cccp/.bash_profile": {
+    #     "owner": None,
+    #     "group": None,
+    #     "mode": "0770",
+    #     "content_type": "text",
+    #     "source": "bash_profile",
+    # },
+       "/home/cccp/.xsession": {
+        "owner": None,
+        "group": None,
+        "mode": "0770",
+        "content_type": "text",
+        "source": "xsession",
+    },
+    "/etc/X11/xorg.conf.d/52-resolution-fix.conf":{
+        "owner": "root",
+        "group": "root",
+        "mode": "0644",
+        "content_type": "text",
+        "source": "resolution-fix.conf",
+    },
+    # "/etc/systemd/system/getty@tty1.service.d/autologin.conf":{
+    #     "owner": "root",
+    #     "group": "root",
+    #     "mode": "0644",
+    #     "content_type": "text",
+    #     "source": "autologin.conf"
+    # }
+    "/etc/lightdm/lightdm.conf":{
+        "owner": "root",
+        "group": "root",
+        "mode": "0644",
+        "content_type": "text",
+        "source": "lightdm.conf"
+    },
 }
+#
+# #systemctl --quiet set-default graphical.target
+# cat > /etc/systemd/system/getty@tty1.service.d/autologin.conf << EOF
+# [Service]
+# ExecStart=
+# ExecStart=-/sbin/agetty --autologin $USER --noclear %I \$TERM
+# EOF
+#           sed /etc/lightdm/lightdm.conf -i -e "s/^\(#\|\)autologin-user=.*/autologin-user=$USER/"
+#           disable_raspi_config_at_boot
+#
