@@ -1,3 +1,6 @@
 nodes = {
-    "mediapi": {"hostname": "mediapi", "bundles": ["i3"]},
+    "mediapi": {
+        "hostname": "mediapi",
+        "bundles": ["update", "x-org", "displaymanager", "i3", "packages", "scripts"],
+    },
 }
